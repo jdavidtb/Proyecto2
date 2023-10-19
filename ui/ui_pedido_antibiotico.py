@@ -33,7 +33,6 @@ class PedidoAntibioticoUI:
         IDFactura = int(input("Ingrese ID de factura: "))
         nueva_cantidad = int(input("Ingrese nueva cantidad: "))
         nuevo_id_antibiotico = int(input("Ingrese nuevo ID del antibiótico: "))
-        # Aquí puedes agregar lógica para recalcular el subtotal basado en la nueva cantidad y el precio del antibiótico
         nuevo_subtotal = None
 
         if CRUDPedidoAntibiotico.update_pedido(IDFactura, nueva_cantidad, nuevo_id_antibiotico, nuevo_subtotal):
