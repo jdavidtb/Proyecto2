@@ -22,8 +22,8 @@ class AntibioticoUI:
 
             antibiotico = CRUDAntibiotico.create_antibiotico(id_antibiotico, dosis, tipo_animal, nombre, valor)
             print(f"Antibiótico {antibiotico.nombre} agregado con éxito!")
-        except ValueError as e:
-            print(e)
+        except ValueError as error:
+            print(error)
 
     def mostrar_antibiotico(self):
         id_antibiotico = int(input("Ingrese el ID del antibiótico que desea ver: "))
@@ -52,8 +52,8 @@ class AntibioticoUI:
                 print("Antibiótico actualizado con éxito!")
             else:
                 print("Error al actualizar el antibiótico.")
-        except ValueError as e:
-            print(e)
+        except ValueError as error:
+            print(error)
 
     def eliminar_antibiotico(self):
         id_antibiotico = int(input("Ingrese el ID del antibiótico que desea eliminar: "))
