@@ -1,12 +1,12 @@
 from datetime import datetime
 
-
 class Factura:
     def __init__(self, valor_total, cedula, id_factura, fecha=None):
         self._id_factura = id_factura
         self._valor_total = valor_total
         self._cedula = cedula
-        self._pedidos = []
+        self._productos_control = []
+        self._antibiotico = []
 
         if fecha is None:
             self._fecha = datetime.now()
@@ -41,16 +41,18 @@ class Factura:
             raise ValueError("La cédula no puede estar vacía.")
         self._cedula = value
 
-    @property
-    def pedidos(self):
-        return self._pedidos
+    def agregar_pedido_control(self, producto_control):
+        self._productos_control.append(producto_control)
+        self.calcular_valor_total()
 
-    def agregar_pedido(self, pedido):
-        self._pedidos.append(pedido)
+    def agregar_pedido_antibiotico(self, antibiotico):
+        self._antibiotico.append(antibiotico)
         self.calcular_valor_total()
 
     def calcular_valor_total(self):
-        self._valor_total = sum(pedido.subtotal for pedido in self._pedidos)
+        total_productos_control = sum(item.valor for item in self._productos_control)
+        total_antibioticos = sum(item.valor for item in self._antibiotico)
+        self._valor_total = total_productos_control + total_antibioticos
 
     @property
     def fecha(self):
@@ -63,5 +65,10 @@ class Factura:
         else:
             raise ValueError("La fecha proporcionada debe ser un objeto datetime.")
 
+    @id_factura.setter
+    def id_factura(self, value):
+        self._id_factura = value
+
     def __str__(self):
         return f"Factura del {self.fecha} con valor total de {self._valor_total}"
+
