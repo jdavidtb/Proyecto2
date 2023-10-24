@@ -36,38 +36,61 @@ class FacturaUI:
             return
         for factura in facturas:
             print(
-                f"ID: {factura.IDfactura}, Fecha: {factura.fecha}, Valor Total: ${factura.valor_total}, Cédula: {factura.cedula}")
+                f"ID: {factura.id_factura}, Fecha: {factura.fecha}, Valor Total: ${factura.valor_total}, Cédula: {factura.cedula}")
 
     def agregar_factura(self):
-        IDfactura = input("Ingrese el ID de la factura: ")
-        fecha_str = input("Ingrese la fecha (YYYY-MM-DD) o presione enter para usar la fecha actual: ")
-        fecha = None if not fecha_str else datetime.strptime(fecha_str, '%Y-%m-%d')
-        valor_total = float(input("Ingrese el valor total de la factura: "))
+        id_factura = input("Ingrese el ID de la factura: ")
+
+        try:
+            fecha_str = input("Ingrese la fecha (YYYY-MM-DD) o presione enter para usar la fecha actual: ")
+            fecha = None if not fecha_str else datetime.strptime(fecha_str, '%Y-%m-%d')
+            valor_total = float(input("Ingrese el valor total de la factura: "))
+        except ValueError:
+            print("Formato de entrada no válido.")
+            return
+
         cedula = input("Ingrese la cédula asociada a la factura: ")
 
-        factura = CRUDFactura.create_factura(IDfactura, fecha, valor_total, cedula)
-        print(f"Factura {factura.IDfactura} creada exitosamente.")
+        factura = CRUDFactura.create_factura(id_factura, fecha, valor_total, cedula)
+        print(f"Factura {factura.id_factura} creada exitosamente.")
 
     def editar_factura(self):
-        IDfactura = input("Ingrese el ID de la factura que desea editar: ")
-        factura = CRUDFactura.read_factura(IDfactura)
+        id_factura = input("Ingrese el ID de la factura que desea editar: ")
+        factura = CRUDFactura.read_factura(id_factura)
         if not factura:
             print("No se encontró la factura.")
             return
 
         nueva_fecha_str = input("Ingrese la nueva fecha (YYYY-MM-DD) o presione enter para mantener la actual: ")
-        nueva_fecha = None if not nueva_fecha_str else datetime.strptime(nueva_fecha_str, '%Y-%m-%d')
-        nuevo_valor_total = input("Ingrese el nuevo valor total o presione enter para mantener el actual: ")
-        nuevo_valor_total = float(nuevo_valor_total) if nuevo_valor_total else None
-        nueva_cedula = input("Ingrese la nueva cédula o presione enter para mantener la actual: ")
+        if nueva_fecha_str:
+            try:
+                nueva_fecha = datetime.strptime(nueva_fecha_str, '%Y-%m-%d')
+            except ValueError:
+                print("Formato de fecha no válido.")
+                return
+        else:
+            nueva_fecha = factura.fecha
 
-        CRUDFactura.update_factura(IDfactura, nueva_fecha, nuevo_valor_total, nueva_cedula)
-        print(f"Factura {IDfactura} actualizada exitosamente.")
+        nuevo_valor_str = input("Ingrese el nuevo valor total o presione enter para mantener el actual: ")
+        if nuevo_valor_str:
+            try:
+                nuevo_valor_total = float(nuevo_valor_str)
+            except ValueError:
+                print("Valor total no válido.")
+                return
+        else:
+            nuevo_valor_total = factura.valor_total
+
+        nueva_cedula = input("Ingrese la nueva cédula o presione enter para mantener la actual: ")
+        nueva_cedula = nueva_cedula if nueva_cedula else factura.cedula
+
+        CRUDFactura.update_factura(id_factura, nueva_valor_total, nueva_fecha)
+        print(f"Factura {id_factura} actualizada exitosamente.")
 
     def eliminar_factura(self):
-        IDfactura = input("Ingrese el ID de la factura que desea eliminar: ")
-        if CRUDFactura.delete_factura(IDfactura):
-            print(f"Factura {IDfactura} eliminada exitosamente.")
+        id_factura = input("Ingrese el ID de la factura que desea eliminar: ")
+        if CRUDFactura.delete_factura(id_factura):
+            print(f"Factura {id_factura} eliminada exitosamente.")
         else:
             print("No se encontró la factura.")
 
