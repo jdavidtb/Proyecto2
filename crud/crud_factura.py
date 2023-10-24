@@ -1,12 +1,20 @@
 from model.factura import Factura
 from datetime import datetime
+
 class CRUDFactura:
     _facturas = []
 
     @classmethod
-    def create_factura(cls, fecha_str, valor_total, id_factura, cedula):
-        fecha = datetime.strptime(fecha_str, '%Y-%m-%d')
-        nueva_factura = Factura(fecha, valor_total, id_factura, cedula)
+    def create_factura(cls, fecha_str, valor_total, cedula, id_factura):
+        if cls.read_factura(id_factura):
+            raise ValueError(f"Ya existe una factura con el ID: {id_factura}")
+
+        try:
+            fecha = datetime.strptime(fecha_str, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError("Formato de fecha inválido. Debe ser YYYY-MM-DD.")
+
+        nueva_factura = Factura(valor_total, cedula, id_factura, fecha)
         cls._facturas.append(nueva_factura)
         return nueva_factura
 
@@ -18,13 +26,16 @@ class CRUDFactura:
         return None
 
     @classmethod
-    def update_factura(cls, id_factura, nuevo_valor_total=None, nueva_fecha=None):
+    def update_factura(cls, id_factura, nuevo_valor_total=None, nueva_fecha_str=None):
         factura = cls.read_factura(id_factura)
         if factura:
             if nuevo_valor_total:
                 factura.valor_total = nuevo_valor_total
-            if nueva_fecha:
-                factura.fecha = nueva_fecha
+            if nueva_fecha_str:
+                try:
+                    factura.fecha = datetime.strptime(nueva_fecha_str, '%Y-%m-%d')
+                except ValueError:
+                    raise ValueError("Formato de fecha inválido. Debe ser YYYY-MM-DD.")
             return True
         return False
 
@@ -35,4 +46,5 @@ class CRUDFactura:
             cls._facturas.remove(factura)
             return True
         return False
+
 
