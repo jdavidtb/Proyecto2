@@ -1,16 +1,54 @@
-# This is a sample Python script.
-
-# Press Mayús+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from ui.ui_factura import FacturaUI
+from ui.ui_cliente import ClienteUI
+from ui.ui_antibiotico import AntibioticoUI
+from ui.ui_producto_control import UIProductoControl
+from ui.ui_control_de_plagas import UIControlDePlagas
+from ui.ui_control_fertilizantes import FertilizantesUI
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def main_menu():
+    while True:
+        print("\nMENU PRINCIPAL DE TIENDA AGRÍCOLA")
+        print("1. Cliente ")
+        print("2. Factura")
+        print("3. Producto Control")
+        print("4. Antibióticos")
+        print("5. Control de Plagas")
+        print("6. Control de Fertilizantes")
+        print("7. Salir")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+        choice = input("Seleccione una opción: ")
+
+        if choice == "1":
+            cliente_ui =ClienteUI ()
+            cliente_ui.main()
+        elif choice == "2":
+            factura_ui = FacturaUI()
+            factura_ui.main()
+
+            pass
+        elif choice == "3":
+            producto_control_ui =UIProductoControl()
+            producto_control_ui.main()
+            pass
+        elif choice == "4":
+            antibiotico_ui = AntibioticoUI()
+            antibiotico_ui.main()
+            pass
+        elif choice == "5":
+            control_plagas_ui= UIControlDePlagas()
+            control_plagas_ui.main()
+            pass
+        elif choice == "6":
+            control_fertilizantes= FertilizantesUI()
+            control_fertilizantes.main()
+            pass
+        elif choice == "7":
+            print("Gracias por usar el sistema. ¡Hasta pronto!")
+            break
+        else:
+            print("Opción no válida. Por favor, intente de nuevo.")
+
+
+if __name__ == "__main__":
+    main_menu()
